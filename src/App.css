@@ -29,6 +29,32 @@
   background-color: purple;
 }
 
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgb(5, 104, 38);
+  border-radius: 10px;
+  background-color: rgb(250, 224, 239);
+  margin-top: 0.8rem;
+}
+
+.case {
+  width: 4rem;
+  height: 4rem;
+  margin: 1rem;
+  border: 1px solid black;
+  border-radius: 10rem;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
