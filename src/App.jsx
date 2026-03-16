@@ -10,15 +10,23 @@ function App() {
   const [ caseClicked, setCaseClicked ] = useState(null);
   const [ pickedColor, setPickedColor ] = useState(null);
   
-function handleColorClick(pickedColor, caseClicked) {
+
+  function handleColorClick(pickedColor, caseClicked, turn, proposals) {
   if (caseClicked !== null && pickedColor !== null) {
     const newProposals = [...proposals];
-    newProposals[turn-1][caseClicked] = pickedColor;
+    newProposals[caseClicked] = pickedColor;
     setProposals(newProposals);
     setCaseClicked(null);
     setPickedColor(null);
   }
 }
+
+handleColorClick(pickedColor, caseClicked, turn, proposals);
+
+console.log(secretCode);
+console.log(proposals);
+console.log(pickedColor);
+console.log(caseClicked);
 
   return (
     <>
@@ -34,12 +42,12 @@ function handleColorClick(pickedColor, caseClicked) {
         ))}
       </div>
       <div className='gameContainer'>
-        {Array.from({ length: 10 }).map((_, rowIndex) => (
+        {Array.from({ length: turn }).map((_, rowIndex) => (
           <div key={rowIndex} className='row'>
             {Array.from({ length: 4 }).map((_, caseIndex) => (
               <div 
                 key={caseIndex} 
-                className='case' 
+                className={'case' + (proposals[caseIndex] ? ' ' + proposals[caseIndex] : '')}
                 onClick={() => setCaseClicked(caseIndex)}
               ></div>
             ))}
