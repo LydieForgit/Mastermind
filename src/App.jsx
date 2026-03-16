@@ -11,7 +11,7 @@ function App() {
   const [ pickedColor, setPickedColor ] = useState(null);
   
 
-  function handleColorClick(pickedColor, caseClicked, turn, proposals) {
+  function handleColorClick(pickedColor, caseClicked, proposals) {
   if (caseClicked !== null && pickedColor !== null) {
     const newProposals = [...proposals];
     newProposals[caseClicked] = pickedColor;
@@ -21,12 +21,30 @@ function App() {
   }
 }
 
-handleColorClick(pickedColor, caseClicked, turn, proposals);
+function checkProposals(secretCode) {
+  if (check.length === 4) {
+    for (let i = 0; i < 4; i++) {
+      if (check[i] === secretCode[i]) {
+        console.log('Correct color and position');
+      } else if (secretCode.map(color => color.toLowerCase()).includes(check[i].toLowerCase())) {
+        console.log('Correct color but wrong position');
+      } else {
+        console.log('Incorrect color');
+      }
+    }
+    setTurn(turn + 1);
+    setCheck([]);
+  }
+}
+  
+
+handleColorClick(pickedColor, caseClicked, proposals);
+checkProposals(secretCode);
 
 console.log(secretCode);
-console.log(proposals);
-console.log(pickedColor);
-console.log(caseClicked);
+console.log(typeof check);
+console.log(check);
+
 
   return (
     <>
@@ -51,6 +69,7 @@ console.log(caseClicked);
                 onClick={() => setCaseClicked(caseIndex)}
               ></div>
             ))}
+          <button onClick={() => setCheck(proposals)}>Valider</button>
           </div>
         ))}
       </div>
