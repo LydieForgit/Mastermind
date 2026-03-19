@@ -44,5 +44,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "types.ts"]
+  "include": ["src", "src/types/types.ts"]
 }
