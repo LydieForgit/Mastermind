@@ -2,14 +2,22 @@ import { useState } from "react";
 import { pieceColors } from "../Game/Initiate";
 import "./Proposal.css";
 
-function Proposal() {
-  const [combination, setCombination] = useState([]);
-  const [check, setCheck] = useState([]);
-  const [caseClicked, setCaseClicked] = useState(null);
-  const [pickedColor, setPickedColor] = useState(null);
+interface ProposalProps {
+  setCheck: React.Dispatch<React.SetStateAction<string[]>>;
+  setProposals: React.Dispatch<React.SetStateAction<string[][]>>;
+}
+
+function Proposal({ setCheck, setProposals }: ProposalProps) {
+  const [combination, setCombination] = useState<string[]>(Array(4).fill(""));
+  const [caseClicked, setCaseClicked] = useState<number | null>(null);
+  const [pickedColor, setPickedColor] = useState<string | null>(null);
   const [showPalettes, setShowPalettes] = useState(false);
 
-  function handleColorClick(pickedColor, caseClicked, combination) {
+  function handleColorClick(
+    pickedColor: string | null,
+    caseClicked: number | null,
+    combination: string[],
+  ) {
     if (caseClicked !== null && pickedColor !== null) {
       const newCombination = [...combination];
       newCombination[caseClicked] = pickedColor;
@@ -20,15 +28,27 @@ function Proposal() {
     }
   }
 
+  function handleValidation() {
+    const isComplete = combination.length === 4 && combination.every(Boolean);
+
+    if (isComplete) {
+      setCheck(combination);
+      setProposals((prev) => [...prev, combination]);
+      setCombination(Array(4).fill(""));
+    } else {
+      console.log("Please fill in all 4 cases");
+    }
+  }
+
   handleColorClick(pickedColor, caseClicked, combination);
 
   return (
     <div className="proposal-container">
-      {showPalettes ? (
+      {showPalettes && caseClicked !== null ? (
         <div
           className="palette"
           style={{
-            left: `${caseClicked * 6 + 3.5}rem`, // Ajustez le calcul si nécessaire (6rem par case + offset)
+            left: `${caseClicked * 6 + 3.5}rem`,
             top: "-9rem",
           }}
         >
@@ -47,7 +67,9 @@ function Proposal() {
             key={caseIndex}
             className={
               "case" +
-              (combination[caseIndex] ? " " + combination[caseIndex] : "")
+              (combination[caseIndex]
+                ? " " + combination[caseIndex]
+                : " neutral")
             }
             onClick={() => {
               setCaseClicked(caseIndex);
@@ -55,7 +77,7 @@ function Proposal() {
             }}
           ></div>
         ))}
-        <button onClick={() => setCheck(combination)}>Valider</button>
+        <button onClick={() => handleValidation()}>Valider</button>
       </div>
     </div>
   );

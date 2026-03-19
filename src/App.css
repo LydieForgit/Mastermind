@@ -12,6 +12,22 @@
   align-items: center;
 }
 
+.proposal-check {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.proposal-container {
+  flex: 3;
+}
+
+.check-container {
+  flex: 1;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

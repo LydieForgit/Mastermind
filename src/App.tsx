@@ -1,39 +1,18 @@
 import { useState } from "react";
 import "./App.css";
 import { generateSecretCode } from "./Game/Initiate.js";
+import Check from "./components/Check";
 import Proposal from "./components/Proposal";
 
 function App() {
-  const [secretCode, setSecretCode] = useState(generateSecretCode());
+  const [secretCode, setSecretCode] = useState<string[]>(generateSecretCode());
   const [turn, setTurn] = useState(1);
-  const [check, setCheck] = useState([]);
-  const [proposals, setProposals] = useState([]);
+  const [check, setCheck] = useState<string[]>([]);
+  const [proposals, setProposals] = useState<string[][]>([]);
 
-  function checkProposals(secretCode) {
-    if (check.length === 4) {
-      for (let i = 0; i < 4; i++) {
-        if (check[i] === secretCode[i]) {
-          console.log("Correct color and position");
-        } else if (
-          secretCode
-            .map((color) => color.toLowerCase())
-            .includes(check[i].toLowerCase())
-        ) {
-          console.log("Correct color but wrong position");
-        } else {
-          console.log("Incorrect color");
-        }
-      }
-      setTurn(turn + 1);
-      setCheck([]);
-    }
-  }
-
-  checkProposals(secretCode);
-
-  console.log(secretCode);
-  console.log(typeof check);
-  console.log(check);
+  console.log("check:", check);
+  console.log("proposals:", proposals);
+  console.log("secretCode:", secretCode);
 
   return (
     <>
@@ -42,7 +21,15 @@ function App() {
       </div>
       <div className="gameContainer">
         {Array.from({ length: turn }).map((_, rowIndex) => (
-          <Proposal key={rowIndex} />
+          <div key={rowIndex} className="proposal-check">
+            <Proposal setCheck={setCheck} setProposals={setProposals} />
+            <Check
+              check={check}
+              setCheck={setCheck}
+              setTurn={setTurn}
+              secretCode={secretCode}
+            />
+          </div>
         ))}
       </div>
     </>
