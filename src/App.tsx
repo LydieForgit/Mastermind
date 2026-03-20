@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { generateSecretCode } from "./Game/Initiate.js";
 import Check from "./components/Check";
@@ -9,9 +9,15 @@ function App() {
   const [turn, setTurn] = useState(1);
   const [check, setCheck] = useState<string[]>([]);
   const [proposals, setProposals] = useState<string[][]>([]);
+  const [decodes, setDecodes] = useState<string[][]>([]);
+
+  useEffect(() => {
+    setTurn(proposals.length + 1);
+  }, [proposals]);
 
   console.log("check:", check);
   console.log("proposals:", proposals);
+  console.log("decodes:", decodes);
   console.log("secretCode:", secretCode);
 
   return (
@@ -22,12 +28,19 @@ function App() {
       <div className="gameContainer">
         {Array.from({ length: turn }).map((_, rowIndex) => (
           <div key={rowIndex} className="proposal-check">
-            <Proposal setCheck={setCheck} setProposals={setProposals} />
+            <Proposal
+              setCheck={setCheck}
+              setProposals={setProposals}
+              rowIndex={rowIndex}
+              proposals={proposals}
+              turn={turn}
+            />
             <Check
               check={check}
               setCheck={setCheck}
-              setTurn={setTurn}
               secretCode={secretCode}
+              setDecodes={setDecodes}
+              setTurn={setTurn}
             />
           </div>
         ))}

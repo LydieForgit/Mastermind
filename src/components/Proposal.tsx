@@ -1,46 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { pieceColors } from "../Game/Initiate";
 import "./Proposal.css";
 
 interface ProposalProps {
   setCheck: React.Dispatch<React.SetStateAction<string[]>>;
   setProposals: React.Dispatch<React.SetStateAction<string[][]>>;
+  rowIndex: number;
+  proposals: string[][];
+  turn: number;
 }
 
-function Proposal({ setCheck, setProposals }: ProposalProps) {
+function Proposal({
+  setCheck,
+  setProposals,
+  rowIndex,
+  proposals,
+  turn,
+}: ProposalProps) {
   const [combination, setCombination] = useState<string[]>(Array(4).fill(""));
   const [caseClicked, setCaseClicked] = useState<number | null>(null);
-  const [pickedColor, setPickedColor] = useState<string | null>(null);
   const [showPalettes, setShowPalettes] = useState(false);
+  const [isActive, setIsActive] = useState(Boolean);
 
-  function handleColorClick(
-    pickedColor: string | null,
-    caseClicked: number | null,
-    combination: string[],
-  ) {
-    if (caseClicked !== null && pickedColor !== null) {
+  useEffect(() => {
+    if (rowIndex === turn - 1) {
+      setIsActive(true);
+      setCombination(Array(4).fill(""));
+    } else {
+      setIsActive(false);
+      setCombination(proposals[rowIndex]!);
+    }
+  }, [rowIndex]);
+
+  function handleColorClick(color: string) {
+    if (caseClicked !== null && isActive) {
       const newCombination = [...combination];
-      newCombination[caseClicked] = pickedColor;
+      newCombination[caseClicked] = color;
       setCombination(newCombination);
       setCaseClicked(null);
-      setPickedColor(null);
       setShowPalettes(false);
+    }
+  }
+
+  function handleCaseClick(caseIndex: number) {
+    if (isActive) {
+      setCaseClicked(caseIndex);
+      setShowPalettes(true);
     }
   }
 
   function handleValidation() {
     const isComplete = combination.length === 4 && combination.every(Boolean);
-
     if (isComplete) {
       setCheck(combination);
       setProposals((prev) => [...prev, combination]);
-      setCombination(Array(4).fill(""));
     } else {
       console.log("Please fill in all 4 cases");
     }
   }
-
-  handleColorClick(pickedColor, caseClicked, combination);
 
   return (
     <div className="proposal-container">
@@ -56,29 +73,34 @@ function Proposal({ setCheck, setProposals }: ProposalProps) {
             <div
               key={index}
               className={`${color} case-palette`}
-              onClick={() => setPickedColor(color)}
+              onClick={() => handleColorClick(color)}
             />
           ))}
         </div>
       ) : null}
-      <div className="row">
-        {Array.from({ length: 4 }).map((_, caseIndex) => (
-          <div
-            key={caseIndex}
-            className={
-              "case" +
-              (combination[caseIndex]
-                ? " " + combination[caseIndex]
-                : " neutral")
-            }
-            onClick={() => {
-              setCaseClicked(caseIndex);
-              setShowPalettes(true);
-            }}
-          ></div>
-        ))}
-        <button onClick={() => handleValidation()}>Valider</button>
-      </div>
+      {isActive ? (
+        <div className="row">
+          {Array.from({ length: 4 }).map((_, caseIndex) => (
+            <div
+              key={caseIndex}
+              className={
+                "case" +
+                (combination[caseIndex]
+                  ? " " + combination[caseIndex]
+                  : " neutral")
+              }
+              onClick={() => handleCaseClick(caseIndex)}
+            />
+          ))}
+          <button onClick={() => handleValidation()}>Valider</button>
+        </div>
+      ) : (
+        <div className="row">
+          {combination.map((color, caseIndex) => (
+            <div key={caseIndex} className={`case ${color}`}></div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
