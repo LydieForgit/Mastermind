@@ -26,7 +26,7 @@ function Check({
     }
   }, [check]);
 
-  function checkProposals(check: Color[]) {
+  const checkProposals = (check: Color[]) => {
     const newFeedback: FeedbackPeg[] = [];
     // Explicitly type copies to allow '' as a marker
     const secretCopy: (Color | '')[] = [...secretCode];
@@ -57,7 +57,7 @@ function Check({
     setFeedback(newFeedback);
     setTurn((prev) => prev + 1);
     setCheck([]);
-  }
+  };
 
   return (
     <div className="check-container">

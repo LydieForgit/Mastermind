@@ -33,7 +33,7 @@ function Proposal({
     }
   }, [rowIndex]);
 
-  function handleColorClick(color: Color) {
+  const handleColorClick = (color: Color) => {
     if (caseClicked !== null && isActive) {
       const newCombination = [...combination];
       newCombination[caseClicked] = color;
@@ -41,16 +41,16 @@ function Proposal({
       setCaseClicked(null);
       setShowPalettes(false);
     }
-  }
+  };
 
-  function handleCaseClick(caseIndex: number) {
+  const handleCaseClick = (caseIndex: number) => {
     if (isActive) {
       setCaseClicked(caseIndex);
       setShowPalettes(true);
     }
-  }
+  };
 
-  function handleValidation() {
+  const handleValidation = () => {
     const isComplete = combination.length === 4 && combination.every(Boolean);
     if (isComplete) {
       setCheck(combination);
@@ -58,7 +58,7 @@ function Proposal({
     } else {
       console.log('Please fill in all 4 cases');
     }
-  }
+  };
 
   return (
     <div className="proposal-container">
