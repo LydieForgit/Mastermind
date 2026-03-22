@@ -1,17 +1,13 @@
-export const pieceColors = [
-  "blue",
-  "red",
-  "green",
-  "yellow",
-  "orange",
-  "purple",
-];
+import { COLORS, type Color } from '../types/types';
 
-export function generateSecretCode(): string[] {
-  const generatedCode: string[] = [];
+export const pieceColors: readonly Color[] = COLORS;
+
+export function generateSecretCode(): Color[] {
+  const generatedCode: Color[] = [];
   while (generatedCode.length < 4) {
-    const pieceColor =
-      pieceColors[Math.floor(Math.random() * pieceColors.length)];
+    const pieceColor = pieceColors[
+      Math.floor(Math.random() * pieceColors.length)
+    ] as Color;
     if (generatedCode.filter((value) => value === pieceColor).length < 2) {
       generatedCode.push(pieceColor);
     }

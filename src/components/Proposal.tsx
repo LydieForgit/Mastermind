@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { pieceColors } from "../Game/Initiate";
-import "./Proposal.css";
+import { useEffect, useState } from 'react';
+import { pieceColors } from '../Game/Initiate';
+import './Proposal.css';
+import type { Color } from '../types/types';
 
 interface ProposalProps {
-  setCheck: React.Dispatch<React.SetStateAction<string[]>>;
-  setProposals: React.Dispatch<React.SetStateAction<string[][]>>;
+  setCheck: React.Dispatch<React.SetStateAction<Color[]>>;
+  setProposals: React.Dispatch<React.SetStateAction<Color[][]>>;
   rowIndex: number;
-  proposals: string[][];
+  proposals: Color[][];
   turn: number;
 }
 
@@ -17,7 +18,7 @@ function Proposal({
   proposals,
   turn,
 }: ProposalProps) {
-  const [combination, setCombination] = useState<string[]>(Array(4).fill(""));
+  const [combination, setCombination] = useState<Color[]>([] as Color[]);
   const [caseClicked, setCaseClicked] = useState<number | null>(null);
   const [showPalettes, setShowPalettes] = useState(false);
   const [isActive, setIsActive] = useState(Boolean);
@@ -25,14 +26,14 @@ function Proposal({
   useEffect(() => {
     if (rowIndex === turn - 1) {
       setIsActive(true);
-      setCombination(Array(4).fill(""));
+      setCombination(Array(4).fill(''));
     } else {
       setIsActive(false);
       setCombination(proposals[rowIndex]!);
     }
   }, [rowIndex]);
 
-  function handleColorClick(color: string) {
+  function handleColorClick(color: Color) {
     if (caseClicked !== null && isActive) {
       const newCombination = [...combination];
       newCombination[caseClicked] = color;
@@ -55,7 +56,7 @@ function Proposal({
       setCheck(combination);
       setProposals((prev) => [...prev, combination]);
     } else {
-      console.log("Please fill in all 4 cases");
+      console.log('Please fill in all 4 cases');
     }
   }
 
@@ -66,7 +67,7 @@ function Proposal({
           className="palette"
           style={{
             left: `${caseClicked * 6 + 3.5}rem`,
-            top: "-9rem",
+            top: '-9rem',
           }}
         >
           {pieceColors.map((color, index) => (
@@ -84,10 +85,10 @@ function Proposal({
             <div
               key={caseIndex}
               className={
-                "case" +
+                'case' +
                 (combination[caseIndex]
-                  ? " " + combination[caseIndex]
-                  : " neutral")
+                  ? ' ' + combination[caseIndex]
+                  : ' neutral')
               }
               onClick={() => handleCaseClick(caseIndex)}
             />

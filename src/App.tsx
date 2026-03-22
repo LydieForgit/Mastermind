@@ -1,24 +1,25 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import { generateSecretCode } from "./Game/Initiate.js";
-import Check from "./components/Check";
-import Proposal from "./components/Proposal";
+import { useEffect, useState } from 'react';
+import './App.css';
+import { generateSecretCode } from './Game/Initiate.js';
+import Check from './components/Check';
+import Proposal from './components/Proposal';
+import type { Color, FeedbackPeg } from './types/types';
 
 function App() {
-  const [secretCode, setSecretCode] = useState<string[]>(generateSecretCode());
+  const [secretCode, setSecretCode] = useState<Color[]>(generateSecretCode());
   const [turn, setTurn] = useState(1);
-  const [check, setCheck] = useState<string[]>([]);
-  const [proposals, setProposals] = useState<string[][]>([]);
-  const [decodes, setDecodes] = useState<string[][]>([]);
+  const [check, setCheck] = useState<Color[]>([]);
+  const [proposals, setProposals] = useState<Color[][]>([]);
+  const [decodes, setDecodes] = useState<FeedbackPeg[][]>([]);
 
   useEffect(() => {
     setTurn(proposals.length + 1);
   }, [proposals]);
 
-  console.log("check:", check);
-  console.log("proposals:", proposals);
-  console.log("decodes:", decodes);
-  console.log("secretCode:", secretCode);
+  console.log('check:', check);
+  console.log('proposals:', proposals);
+  console.log('decodes:', decodes);
+  console.log('secretCode:', secretCode);
 
   return (
     <>
