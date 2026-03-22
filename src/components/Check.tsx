@@ -61,11 +61,8 @@ function Check({
 
   return (
     <div className="check-container">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div
-          key={index}
-          className={`check-case ${feedback[index] || ''}`}
-        ></div>
+      {feedback.map((peg, index) => (
+        <div key={index} className={`check-case ${peg}`}></div>
       ))}
     </div>
   );

@@ -16,6 +16,14 @@ function App() {
     setTurn(proposals.length + 1);
   }, [proposals]);
 
+  const resetGame = () => {
+    setSecretCode(generateSecretCode());
+    setTurn(1);
+    setCheck([]);
+    setProposals([]);
+    setDecodes([]);
+  };
+
   console.log('check:', check);
   console.log('proposals:', proposals);
   console.log('decodes:', decodes);
@@ -25,6 +33,7 @@ function App() {
     <>
       <div>
         <h1>Mastermind</h1>
+        <button onClick={resetGame}>Nouvelle partie</button>
       </div>
       <div className="gameContainer">
         {Array.from({ length: turn }).map((_, rowIndex) => (

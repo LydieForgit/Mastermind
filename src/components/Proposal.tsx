@@ -21,7 +21,7 @@ function Proposal({
   const [combination, setCombination] = useState<Color[]>([] as Color[]);
   const [caseClicked, setCaseClicked] = useState<number | null>(null);
   const [showPalettes, setShowPalettes] = useState(false);
-  const [isActive, setIsActive] = useState(Boolean);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (rowIndex === turn - 1) {
@@ -56,7 +56,7 @@ function Proposal({
       setCheck(combination);
       setProposals((prev) => [...prev, combination]);
     } else {
-      console.log('Please fill in all 4 cases');
+      alert('Please fill in all 4 cases');
     }
   };
 
