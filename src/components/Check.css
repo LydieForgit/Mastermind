@@ -18,6 +18,9 @@
   background-color: rgb(69, 107, 54);
   border-radius: 10px;
   border: 2px solid rgb(6, 8, 7);
+}
+
+.feedback {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;

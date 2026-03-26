@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { pieceColors } from "../Game/Initiate";
+import Button from "./Button";
 import "./Proposal.css";
 
 interface ProposalProps {
@@ -30,7 +31,7 @@ function Proposal({
       setIsActive(false);
       setCombination(proposals[rowIndex]!);
     }
-  }, [rowIndex]);
+  }, [turn]);
 
   function handleColorClick(color: string) {
     if (caseClicked !== null && isActive) {
@@ -92,7 +93,7 @@ function Proposal({
               onClick={() => handleCaseClick(caseIndex)}
             />
           ))}
-          <button onClick={() => handleValidation()}>Valider</button>
+          <Button className="validate" onClick={() => handleValidation()} text="Valider" />
         </div>
       ) : (
         <div className="row">
