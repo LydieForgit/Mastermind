@@ -31,6 +31,9 @@ function Check({
     } else {
       if (decodes[rowIndex]) {
         setFeedback(decodes[rowIndex]);
+      } else {
+        setFeedback([]);
+        setIsChecked(false);
       }
     }
   }, [check]);
