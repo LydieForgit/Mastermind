@@ -24,7 +24,7 @@ function App() {
   function newGame() {
     setSecretCode(generateSecretCode());
     setTurn(1);
-    setCheck(['', '', '', '']);
+    setCheck([]);
     setProposals([]);
     setDecodes([]);
   }

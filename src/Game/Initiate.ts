@@ -1,4 +1,4 @@
-export const pieceColors = [
+export const pieceColors: string[] = [
   "blue",
   "red",
   "green",
@@ -10,10 +10,12 @@ export const pieceColors = [
 export function generateSecretCode(): string[] {
   const generatedCode: string[] = [];
   while (generatedCode.length < 4) {
-    const pieceColor =
+    let randomColor =
       pieceColors[Math.floor(Math.random() * pieceColors.length)];
-    if (generatedCode.filter((value) => value === pieceColor).length < 2) {
-      generatedCode.push(pieceColor);
+    if (
+      randomColor !== undefined && 
+      generatedCode.filter((value) => value === randomColor).length < 2) {
+      generatedCode.push(randomColor);
     }
   }
   return generatedCode;
