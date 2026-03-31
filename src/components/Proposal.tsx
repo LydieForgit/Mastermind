@@ -74,6 +74,7 @@ function Proposal({
             <div
               key={index}
               className={`${color} case-palette`}
+              data-testid="palette-color"
               onClick={() => handleColorClick(color)}
             />
           ))}
