@@ -1,36 +1,32 @@
 import { useEffect, useState } from "react";
 import "./Check.css";
+import type { IDecode, GameState, IProposal } from "../types/types";
 
 interface CheckProps {
-  setCheck: React.Dispatch<React.SetStateAction<string[]>>;
-  check: string[];
-  secretCode: string[];
-  setTurn: React.Dispatch<React.SetStateAction<number>>;
+  check: IProposal;
+  setCheck: React.Dispatch<React.SetStateAction<IProposal>>;
   rowIndex: number;
-  setDecodes: React.Dispatch<React.SetStateAction<string[][]>>;
-  decodes: string[][];
-  proposals: string[][];
+  gameState: GameState;
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
 function Check({
   check,
   setCheck,
-  secretCode,
-  setTurn,
   rowIndex,
-  setDecodes,
-  decodes,
+  gameState,
+  setGameState,
 }: CheckProps) {
-  const [feedback, setFeedback] = useState<string[]>([]);
+  const [feedback, setFeedback] = useState<IDecode>([]);
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
-    if (check.length === 4 && check.every(Boolean) && rowIndex === decodes.length) {
+    if (check.length === 4 && check.every(Boolean) && rowIndex === gameState.decodes.length) {
       checkProposals(check);
       setIsChecked(true);
     } else {
-      if (decodes[rowIndex]) {
-        setFeedback(decodes[rowIndex]);
+      if (gameState.decodes[rowIndex]) {
+        setFeedback(gameState.decodes[rowIndex]);
       } else {
         setFeedback([]);
         setIsChecked(false);
@@ -38,13 +34,13 @@ function Check({
     }
   }, [check]);
 
-  function checkProposals(checking: string[]) {
-    const newFeedback: string[] = [];
-    const secretCopy = [...secretCode];
-    const checkCopy = [...checking];
+  const checkProposals = (checking: IProposal) => {
+    const newFeedback: IDecode = [];
+    const secretCopy = [...gameState.secretCode];
+    const checkCopy: IProposal = [...checking];
 
     for (let i = 0; i < 4; i++) {
-      if (checking[i] === secretCode[i]) {
+      if (checking[i] === gameState.secretCode[i]) {
         newFeedback.push("red");
         secretCopy[i] = "";
         checkCopy[i] = "";
@@ -64,16 +60,14 @@ function Check({
       newFeedback.push("");
     }
     setFeedback(newFeedback);
-    setDecodes((prev) => [...prev, newFeedback]);
-    console.log("decodes dans checkProposals:", decodes);
-    setTurn((prev) => prev + 1);
     setCheck([]);
-    console.log("decodes fin checkProposals:", decodes);
-  }
 
-  console.log("feedback:", feedback);
-  console.log("decodes:", decodes);
-  console.log("decode du row:", decodes[rowIndex]);
+    setGameState((prev) => ({
+      ...prev,
+      decodes: [...prev.decodes, newFeedback],
+      turn: prev.turn + 1,
+    }));
+  }
 
 
   return (

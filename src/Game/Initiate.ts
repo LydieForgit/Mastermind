@@ -1,4 +1,6 @@
-export const pieceColors: string[] = [
+import type { IProposal, IProposalPin } from "../types/types";
+
+export const pieceColors: IProposalPin[] = [
   "blue",
   "red",
   "green",
@@ -7,10 +9,10 @@ export const pieceColors: string[] = [
   "purple",
 ];
 
-export function generateSecretCode(): string[] {
-  const generatedCode: string[] = [];
+export function generateSecretCode(): IProposal {
+  const generatedCode: IProposalPin[] = [];
   while (generatedCode.length < 4) {
-    let randomColor =
+    const randomColor =
       pieceColors[Math.floor(Math.random() * pieceColors.length)];
     if (
       randomColor !== undefined && 
