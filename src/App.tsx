@@ -2,31 +2,50 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { generateSecretCode } from "./Game/Initiate.js";
 import Check from "./components/Check";
-import Proposal from "./components/Proposal";
 import Button from "./components/Button";
+import type { GameState, IProposalPin } from "./types/types";
+import Proposal from "./components/Proposal";
 
 function App() {
-  const [secretCode, setSecretCode] = useState<string[]>(generateSecretCode());
-  const [turn, setTurn] = useState(1);
-  const [check, setCheck] = useState<string[]>([]);
-  const [proposals, setProposals] = useState<string[][]>([]);
-  const [decodes, setDecodes] = useState<string[][]>([]);
+  const [check, setCheck] = useState<IProposalPin[]>([]);
 
+  const [gameState, setGameState] = useState<GameState>({
+    secretCode: generateSecretCode(),
+    proposals: [],
+    decodes: [],
+    turn: 1,
+  });
+  
+  // const [secretCode, setSecretCode] = useState<string[]>(generateSecretCode());
+  // const [turn, setTurn] = useState(1);
+  // const [proposals, setProposals] = useState<string[][]>([]);
+  // const [decodes, setDecodes] = useState<string[][]>([]);
 
   useEffect(() => {
-    setTurn(proposals.length + 1);
-  }, [proposals]);
+    setGameState((prev) => ({
+      ...prev,
+      turn: prev.proposals.length + 1,
+    }))
+    // setTurn(proposals.length + 1);
+  }, [gameState.proposals.length]);
 
-  console.log("secretCode in App:", secretCode);
-  console.log("proposals in App:", proposals);
-  console.log("decodes in App:", decodes);
+  console.log("secretCode in App:", gameState.secretCode);
+  console.log("proposals in App:", gameState.proposals);
+  console.log("decodes in App:", gameState.decodes);
 
-  function newGame() {
-    setSecretCode(generateSecretCode());
-    setTurn(1);
+  const newGame = () => {
+    setGameState({
+      secretCode: generateSecretCode(),
+      proposals: [],
+      decodes: [],
+      turn: 1,
+    });
+
+    // setSecretCode(generateSecretCode());
+    // setTurn(1);
     setCheck([]);
-    setProposals([]);
-    setDecodes([]);
+    // setProposals([]);
+    // setDecodes([]);
   }
 
   return (
@@ -36,26 +55,33 @@ function App() {
       </div>
       <div>
         <Button className="new-game" onClick={newGame} text="New Game" />
+        <p>Turn: {gameState.turn}</p>
       </div>
       <div className="gameContainer">
-        {Array.from({ length: turn }).map((_, rowIndex) => (
+        {Array.from({ length: gameState.turn }).map((_, rowIndex) => (
           <div key={rowIndex} className="proposal-check">
             <Proposal
               setCheck={setCheck}
-              setProposals={setProposals}
+              // setProposals={setProposals}
               rowIndex={rowIndex}
-              proposals={proposals}
-              turn={turn}
+              // proposals={proposals}
+              // turn={turn}
+
+              gameState={gameState}
+              setGameState={setGameState}
             />
             <Check
               setCheck={setCheck}
               check={check}
-              secretCode={secretCode}
-              setTurn={setTurn}
+              // secretCode={secretCode}
+              // setTurn={setTurn}
               rowIndex={rowIndex}
-              decodes={decodes}
-              setDecodes={setDecodes}
-              proposals={proposals}
+              // decodes={decodes}
+              // setDecodes={setDecodes}
+              // proposals={proposals}
+
+              gameState={gameState}
+              setGameState={setGameState}
             />
           </div>
         ))}
