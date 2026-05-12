@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { generateSecretCode } from "./Game/Initiate.js";
-import Check from "./components/Check";
 import Button from "./components/Button";
-import type { GameState, IProposalPin } from "./types/types";
+import Check from "./components/Check";
 import Proposal from "./components/Proposal";
+import type { GameState, IProposalPin } from "./types/types";
 
 function App() {
   const [check, setCheck] = useState<IProposalPin[]>([]);
@@ -15,23 +15,25 @@ function App() {
     decodes: [],
     turn: 1,
   });
-  
-  // const [secretCode, setSecretCode] = useState<string[]>(generateSecretCode());
-  // const [turn, setTurn] = useState(1);
-  // const [proposals, setProposals] = useState<string[][]>([]);
-  // const [decodes, setDecodes] = useState<string[][]>([]);
 
   useEffect(() => {
-    setGameState((prev) => ({
-      ...prev,
-      turn: prev.proposals.length + 1,
-    }))
-    // setTurn(proposals.length + 1);
-  }, [gameState.proposals.length]);
+    const lastDecode = gameState.decodes[gameState.turn - 1];
+    if (lastDecode?.every((value) => value === "red")) {
+      window.alert("Congratulations! You've cracked the code!");
+      setGameState((prev) => ({
+        ...prev,
+        turn: prev.proposals.length,
+      }));
+    } else {
+      setGameState((prev) => ({
+        ...prev,
+        turn: prev.proposals.length + 1,
+      }));
+    }
+  }, [gameState.decodes.length]);
 
   console.log("secretCode in App:", gameState.secretCode);
-  console.log("proposals in App:", gameState.proposals);
-  console.log("decodes in App:", gameState.decodes);
+  console.log("gameState in App:", gameState);
 
   const newGame = () => {
     setGameState({
@@ -40,13 +42,8 @@ function App() {
       decodes: [],
       turn: 1,
     });
-
-    // setSecretCode(generateSecretCode());
-    // setTurn(1);
     setCheck([]);
-    // setProposals([]);
-    // setDecodes([]);
-  }
+  };
 
   return (
     <>
@@ -62,24 +59,14 @@ function App() {
           <div key={rowIndex} className="proposal-check">
             <Proposal
               setCheck={setCheck}
-              // setProposals={setProposals}
               rowIndex={rowIndex}
-              // proposals={proposals}
-              // turn={turn}
-
               gameState={gameState}
               setGameState={setGameState}
             />
             <Check
               setCheck={setCheck}
               check={check}
-              // secretCode={secretCode}
-              // setTurn={setTurn}
               rowIndex={rowIndex}
-              // decodes={decodes}
-              // setDecodes={setDecodes}
-              // proposals={proposals}
-
               gameState={gameState}
               setGameState={setGameState}
             />

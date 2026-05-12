@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { createFeedback } from "../Game/CheckCombo";
+import type { GameState, IDecode, IProposal } from "../types/types";
 import "./Check.css";
-import type { IDecode, GameState, IProposal } from "../types/types";
 
 interface CheckProps {
   check: IProposal;
@@ -21,7 +22,11 @@ function Check({
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
-    if (check.length === 4 && check.every(Boolean) && rowIndex === gameState.decodes.length) {
+    if (
+      check.length === 4 &&
+      check.every(Boolean) &&
+      rowIndex === gameState.decodes.length
+    ) {
       checkProposals(check);
       setIsChecked(true);
     } else {
@@ -35,40 +40,14 @@ function Check({
   }, [check]);
 
   const checkProposals = (checking: IProposal) => {
-    const newFeedback: IDecode = [];
-    const secretCopy = [...gameState.secretCode];
-    const checkCopy: IProposal = [...checking];
-
-    for (let i = 0; i < 4; i++) {
-      if (checking[i] === gameState.secretCode[i]) {
-        newFeedback.push("red");
-        secretCopy[i] = "";
-        checkCopy[i] = "";
-      }
-    }
-    for (let i = 0; i < 4; i++) {
-      if (checkCopy[i] && checkCopy[i] !== "") {
-        const color = checkCopy[i];
-        if (color && secretCopy.includes(color)) {
-          newFeedback.push("white");
-          const index = secretCopy.indexOf(color);
-          secretCopy[index] = "";
-        }
-      }
-    }
-    while (newFeedback.length < 4) {
-      newFeedback.push("");
-    }
+    const newFeedback = createFeedback(checking, gameState.secretCode);
     setFeedback(newFeedback);
     setCheck([]);
-
     setGameState((prev) => ({
       ...prev,
       decodes: [...prev.decodes, newFeedback],
-      turn: prev.turn + 1,
     }));
-  }
-
+  };
 
   return (
     <div className="check-container">
@@ -81,10 +60,7 @@ function Check({
       ) : (
         <div className="feedback">
           {Array.from({ length: 4 }).map((_, index) => (
-            <div
-              key={index}
-              className={`check-case`}
-            ></div>
+            <div key={index} className={`check-case`}></div>
           ))}
         </div>
       )}
