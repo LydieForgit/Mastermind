@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { pieceColors } from "../Game/Initiate";
+import type { GameState, IProposal, IProposalPin } from "../types/types";
 import Button from "./Button";
 import "./Proposal.css";
-import type { GameState, IProposal, IProposalPin } from "../types/types";
 
 interface ProposalProps {
   setCheck: React.Dispatch<React.SetStateAction<IProposal>>;
@@ -30,7 +30,8 @@ function Proposal({
       setIsActive(false);
       setCombination(gameState.proposals[rowIndex]!);
     }
-  }, [gameState.turn]);
+  }, [gameState, gameState.decodes]);
+  //gameState.proposals instead of gameState.turn
 
   function handleColorClick(color: IProposalPin) {
     if (caseClicked !== null && isActive) {
@@ -56,7 +57,8 @@ function Proposal({
       setGameState((prev) => ({
         ...prev,
         proposals: [...prev.proposals, combination],
-      }))
+      }));
+      setIsActive(false);
     } else {
       console.log("Please fill in all 4 cases");
     }
@@ -96,7 +98,11 @@ function Proposal({
               onClick={() => handleCaseClick(caseIndex)}
             />
           ))}
-          <Button className="validate" onClick={() => handleValidation()} text="Valider" />
+          <Button
+            className="validate"
+            onClick={() => handleValidation()}
+            text="✔"
+          />
         </div>
       ) : (
         <div className="row">

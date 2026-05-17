@@ -9,14 +9,30 @@ export const pieceColors: IProposalPin[] = [
   "purple",
 ];
 
-export function generateSecretCode(): IProposal {
+// export function generateSecretCode(): IProposal {
+//   const generatedCode: IProposalPin[] = [];
+//   while (generatedCode.length < 4) {
+//     const randomColor =
+//       pieceColors[Math.floor(Math.random() * pieceColors.length)];
+//     if (
+//       randomColor !== undefined &&
+//       generatedCode.filter((value) => value === randomColor).length < 2) {
+//       generatedCode.push(randomColor);
+//     }
+//   }
+
+export function generateSecretCode(
+  minCase: number,
+  minColor: number,
+): IProposal {
   const generatedCode: IProposalPin[] = [];
-  while (generatedCode.length < 4) {
+  while (generatedCode.length < minCase) {
     const randomColor =
       pieceColors[Math.floor(Math.random() * pieceColors.length)];
     if (
-      randomColor !== undefined && 
-      generatedCode.filter((value) => value === randomColor).length < 2) {
+      randomColor !== undefined &&
+      generatedCode.filter((value) => value === randomColor).length < minColor
+    ) {
       generatedCode.push(randomColor);
     }
   }
