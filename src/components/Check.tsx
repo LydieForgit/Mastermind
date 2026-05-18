@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFeedback } from "../Game/CheckCombo";
-import type { GameState, IDecode, IProposal } from "../types/types";
+import type { IDecode, IGameState, IProposal } from "../types/types";
 import "./Check.css";
 
 interface CheckProps {
   check: IProposal;
   setCheck: React.Dispatch<React.SetStateAction<IProposal>>;
   rowIndex: number;
-  gameState: GameState;
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+  gameState: IGameState;
+  setGameState: React.Dispatch<React.SetStateAction<IGameState>>;
 }
 
 function Check({

@@ -13,7 +13,7 @@ export type IProposal = IProposalPin[];
 
 export type IDecode = IDecodePin[];
 
-export type GameState = {
+export type IGameState = {
   secretCode: IProposal;
   proposals: IProposal[];
   decodes: IDecode[];

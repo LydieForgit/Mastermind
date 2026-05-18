@@ -1,40 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { pieceColors } from "../Game/Initiate";
-import type { GameState, IProposal, IProposalPin } from "../types/types";
-import Button from "./Button";
+import type { IProposal, IProposalPin } from "../types/types";
 import "./Proposal.css";
 
 interface ProposalProps {
-  setCheck: React.Dispatch<React.SetStateAction<IProposal>>;
-  rowIndex: number;
-  gameState: GameState;
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>;
+  combination: IProposal;
+  setCombination: React.Dispatch<React.SetStateAction<IProposal>>;
+  isActive: boolean;
+  isGameOver: boolean;
 }
 
 function Proposal({
-  setCheck,
-  rowIndex,
-  gameState,
-  setGameState,
+  combination,
+  setCombination,
+  isActive,
+  isGameOver,
 }: ProposalProps) {
-  const [combination, setCombination] = useState<IProposal>(Array(4).fill(""));
   const [caseClicked, setCaseClicked] = useState<number | null>(null);
   const [showPalettes, setShowPalettes] = useState(false);
-  const [isActive, setIsActive] = useState(Boolean);
-
-  useEffect(() => {
-    if (rowIndex === gameState.turn - 1) {
-      setIsActive(true);
-      setCombination(Array(4).fill(""));
-    } else {
-      setIsActive(false);
-      setCombination(gameState.proposals[rowIndex]!);
-    }
-  }, [gameState, gameState.decodes]);
-  //gameState.proposals instead of gameState.turn
 
   function handleColorClick(color: IProposalPin) {
-    if (caseClicked !== null && isActive) {
+    if (caseClicked !== null && isActive && !isGameOver) {
       const newCombination = [...combination];
       newCombination[caseClicked] = color;
       setCombination(newCombination);
@@ -47,20 +33,6 @@ function Proposal({
     if (isActive) {
       setCaseClicked(caseIndex);
       setShowPalettes(true);
-    }
-  }
-
-  function handleValidation() {
-    const isComplete = combination.length === 4 && combination.every(Boolean);
-    if (isComplete) {
-      setCheck(combination);
-      setGameState((prev) => ({
-        ...prev,
-        proposals: [...prev.proposals, combination],
-      }));
-      setIsActive(false);
-    } else {
-      console.log("Please fill in all 4 cases");
     }
   }
 
@@ -84,7 +56,7 @@ function Proposal({
           ))}
         </div>
       ) : null}
-      {isActive ? (
+      {isActive && !isGameOver ? (
         <div className="row">
           {Array.from({ length: 4 }).map((_, caseIndex) => (
             <div
@@ -98,11 +70,6 @@ function Proposal({
               onClick={() => handleCaseClick(caseIndex)}
             />
           ))}
-          <Button
-            className="validate"
-            onClick={() => handleValidation()}
-            text="✔"
-          />
         </div>
       ) : (
         <div className="row">

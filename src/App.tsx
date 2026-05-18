@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { generateSecretCode } from "./Game/Initiate.js";
 import Button from "./components/Button";
-import Check from "./components/Check";
-import Proposal from "./components/Proposal";
-import { type GameState, type ILevel, type IProposalPin } from "./types/types";
+import GameRow from "./components/GameRow";
+import { type IGameState, type ILevel } from "./types/types";
 
 function App() {
-  const [check, setCheck] = useState<IProposalPin[]>([]);
-
-  const [gameState, setGameState] = useState<GameState>({
+  const [gameState, setGameState] = useState<IGameState>({
     secretCode: generateSecretCode(0, 0),
     proposals: [],
     decodes: [],
@@ -23,6 +20,8 @@ function App() {
     turn: 12,
   });
 
+  const [isGameOver, setIsGameOver] = useState(false);
+
   useEffect(() => {
     setGameState({
       secretCode: generateSecretCode(level.minCase, level.minColor),
@@ -30,7 +29,7 @@ function App() {
       decodes: [],
       turn: 1,
     });
-    setCheck([]);
+    setIsGameOver(false);
   }, [level]);
 
   useEffect(() => {
@@ -41,6 +40,7 @@ function App() {
         ...prev,
         turn: prev.proposals.length,
       }));
+      setIsGameOver(true);
     } else if (gameState.turn < level.turn) {
       setGameState((prev) => ({
         ...prev,
@@ -48,6 +48,7 @@ function App() {
       }));
     } else if (gameState.turn === level.turn) {
       window.alert("Game Over! You've used all your turns!");
+      setIsGameOver(true);
     }
   }, [gameState.decodes.length]);
 
@@ -89,21 +90,13 @@ function App() {
       </div>
       <div className="gameContainer">
         {Array.from({ length: gameState.turn }).map((_, rowIndex) => (
-          <div key={rowIndex} className="proposal-check">
-            <Proposal
-              setCheck={setCheck}
-              rowIndex={rowIndex}
-              gameState={gameState}
-              setGameState={setGameState}
-            />
-            <Check
-              setCheck={setCheck}
-              check={check}
-              rowIndex={rowIndex}
-              gameState={gameState}
-              setGameState={setGameState}
-            />
-          </div>
+          <GameRow
+            key={rowIndex}
+            rowIndex={rowIndex}
+            gameState={gameState}
+            setGameState={setGameState}
+            isGameOver={isGameOver}
+          />
         ))}
       </div>
     </>
